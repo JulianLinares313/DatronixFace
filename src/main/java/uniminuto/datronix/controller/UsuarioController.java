@@ -20,6 +20,7 @@ import uniminuto.datronix.service.UsuarioService;
 @RestController
 @RequestMapping("/api/usuarios")
 @CrossOrigin(origins = "*")  //  Permite peticiones desde cualquier origen
+// Atiende el registro, las consultas y el inicio de sesión de los usuarios.
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -32,34 +33,34 @@ public class UsuarioController {
 
     @GetMapping
     public List<Usuario> listarUsuarios() {
-
+        // Devuelve los usuarios que el servicio encuentra en la base de datos.
         return usuarioService.listarUsuarios();
 
     }
 
     @GetMapping("/{id}")
     public Usuario buscarUsuarioPorId(@PathVariable String id) {
-
+        // Usa el documento o identificador recibido en la URL para buscar un usuario.
         return usuarioService.buscarUsuarioPorId(id);
 
     }
 
     @PostMapping
     public Usuario guardarUsuario(@RequestBody Usuario usuario) {
-
+        // Guarda directamente los datos del usuario enviados por el formulario.
         return usuarioService.guardarUsuario(usuario);
     }
 
     @DeleteMapping
     public void eliminarUsuario(@PathVariable String id) {
-
+        // Solicita al servicio que elimine el usuario indicado.
         usuarioService.eliminarUsuario(id);
 
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-
+        // Comprueba las credenciales y devuelve al usuario o un aviso de acceso rechazado.
         Usuario usuario = usuarioService.autenticar(loginRequest.getCorreoUsuario(),
                 loginRequest.getContrasenaUsuario());
 

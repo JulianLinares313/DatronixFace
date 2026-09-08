@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// Guarda la información principal de una compra realizada por el negocio.
 public class Compra {
 
     @Id

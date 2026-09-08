@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// Representa el documento que acompaña o entrega una operación de mercancía.
 public class Remision {
 
     @Id

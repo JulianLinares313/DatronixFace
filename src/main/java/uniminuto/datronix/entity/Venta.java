@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// Representa una venta, su cliente y la lista de productos vendidos.
 public class Venta {
 
     @Id
@@ -44,11 +45,13 @@ public class Venta {
 
     // Métodos helper para sincronizar la relación bidireccional
     public void addDetalle(DetalleVenta detalle) {
+        // Mantener ambos lados evita que el detalle quede desconectado de la venta.
         detalleVentaList.add(detalle);
         detalle.setVenta(this);
     }
 
     public void removeDetalle(DetalleVenta detalle) {
+        // Al retirar el detalle también se limpia su referencia a esta venta.
         detalleVentaList.remove(detalle);
         detalle.setVenta(null);
     }

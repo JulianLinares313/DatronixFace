@@ -10,6 +10,7 @@ console.log('✅ productos.js cargado');
 
 // ============ INICIALIZACIÓN ============
 function inicializarProductos() {
+    // Carga primero las opciones relacionadas y luego prepara la tabla y sus botones.
     console.log('✅ inicializarProductos ejecutado');
     cargarProveedores();
     cargarProductos();
@@ -21,6 +22,7 @@ function inicializarProductos() {
 
 // ============ CARGAR PROVEEDORES PARA SELECTS ============
 async function cargarProveedores() {
+    // Los proveedores son necesarios para que los formularios puedan elegir una relación válida.
     try {
         proveedoresData = await getData('/proveedores');
         llenarSelectProveedores('selectProveedor');
@@ -31,6 +33,7 @@ async function cargarProveedores() {
 }
 
 function llenarSelectProveedores(idSelect) {
+    // Reconstruye un selector con los proveedores que llegaron desde la API.
     const select = document.getElementById(idSelect);
     if (!select) return;
     const valorActual = select.value;
@@ -46,6 +49,7 @@ function llenarSelectProveedores(idSelect) {
 
 // ============ CARGAR PRODUCTOS ============
 async function cargarProductos() {
+    // Trae la información actual y la convierte en filas visibles.
     console.log('✅ cargarProductos ejecutado');
     try {
         productosData = await getData('/productos');
@@ -60,6 +64,7 @@ async function cargarProductos() {
 
 // ============ RENDERIZAR TABLA ============
 function renderizarTabla(data) {
+    // Presenta los productos en la tabla y deja cada fila marcada con su ID.
     const tbody = document.getElementById('tbodyProductos');
     if (!tbody) {
         console.error('❌ No se encontró el elemento tbodyProductos');
@@ -87,6 +92,7 @@ function renderizarTabla(data) {
 
 // ============ BÚSQUEDA ============
 function buscarProductos() {
+    // Filtra en memoria por ID o nombre para encontrar rápidamente un producto.
     const termino = document.getElementById('txtBuscarProducto').value.trim().toLowerCase();
     if (!termino) {
         renderizarTabla(productosData);
@@ -112,6 +118,7 @@ function cerrarModalAgregar() {
 }
 
 function abrirModalEditar() {
+    // Copia al formulario el producto correspondiente a la fila seleccionada.
     const selectedRow = document.querySelector('#tablaProductos tbody tr.selected');
     if (!selectedRow) {
         alert('Selecciona un producto de la tabla');
@@ -148,6 +155,7 @@ function cerrarModalEditar() {
 
 // ============ CRUD ============
 async function guardarProducto() {
+    // Lee y valida el formulario antes de enviar un nuevo producto al backend.
     const id = parseInt(document.getElementById('txtIdProducto').value.trim());
     const nombre = document.getElementById('txtNombreProducto').value.trim();
     const categoria = document.getElementById('txtCategoriaProducto').value.trim();
@@ -189,6 +197,7 @@ async function guardarProducto() {
 }
 
 async function guardarProductoEdit() {
+    // Envía los cambios del producto seleccionado y refresca la tabla local.
     const id = parseInt(document.getElementById('txtIdProductoEdit').value);
     const nombre = document.getElementById('txtNombreProductoEdit').value.trim();
     const categoria = document.getElementById('txtCategoriaProductoEdit').value.trim();
@@ -233,6 +242,7 @@ async function guardarProductoEdit() {
 }
 
 async function eliminarProducto() {
+    // Confirma la intención y, si la API responde bien, retira la fila de la pantalla.
     const selectedRow = document.querySelector('#tablaProductos tbody tr.selected');
     if (!selectedRow) {
         alert('Selecciona un producto para eliminar');
@@ -280,6 +290,7 @@ function limpiarFormularioEditar() {
 
 // ============ CONFIGURAR EVENTOS ============
 function configurarEventosProductos() {
+    // Deja conectados búsqueda, formularios, selección y acciones de la tabla.
     console.log('✅ configurarEventosProductos ejecutado');
     const btnBuscar = document.getElementById('btnBuscarProducto');
     if (btnBuscar) {

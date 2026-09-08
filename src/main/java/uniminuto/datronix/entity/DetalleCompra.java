@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// Representa un producto concreto dentro de una compra.
 public class DetalleCompra {
 
     @Id

@@ -3,8 +3,11 @@
 // URL base de tu backend (cambia si está en otro puerto)
 const API_BASE = '/api';
 
+// Todas las pantallas usan estas funciones para hablar con el backend sin repetir fetch.
+
 // Función para obtener headers (con autenticación si la tienes)
 function getHeaders() {
+    // El token, si existe, viaja en cada petición para que el backend pueda identificarla.
     const token = localStorage.getItem('token');
     return {
         'Content-Type': 'application/json',
@@ -16,6 +19,7 @@ function getHeaders() {
 
 // GET
 export async function getData(endpoint) {
+    // Consulta información y convierte la respuesta correcta en datos JavaScript.
     const response = await fetch(`${API_BASE}${endpoint}`, {
         method: 'GET',
         headers: getHeaders()
@@ -29,6 +33,7 @@ export async function getData(endpoint) {
 
 // POST
 export async function postData(endpoint, data) {
+    // Envía información nueva y devuelve el registro que el servidor confirma.
     const response = await fetch(`${API_BASE}${endpoint}`, {
         method: 'POST',
         headers: getHeaders(),
@@ -43,6 +48,7 @@ export async function postData(endpoint, data) {
 
 // PUT
 export async function putData(endpoint, data) {
+    // Envía los cambios de un registro y devuelve la respuesta del backend.
     const response = await fetch(`${API_BASE}${endpoint}`, {
         method: 'PUT',
         headers: getHeaders(),
@@ -57,6 +63,7 @@ export async function putData(endpoint, data) {
 
 // DELETE
 export async function deleteData(endpoint) {
+    // Solicita el borrado; se devuelve la respuesta completa porque normalmente no trae JSON.
     const response = await fetch(`${API_BASE}${endpoint}`, {
         method: 'DELETE',
         headers: getHeaders()

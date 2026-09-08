@@ -9,6 +9,7 @@ console.log('✅ proveedores.js cargado');
 
 // ============ INICIALIZACIÓN ============
 function inicializarProveedores() {
+    // Prepara la pantalla cargando los proveedores y conectando sus controles.
     console.log('✅ inicializarProveedores ejecutado');
     cargarProveedores();
     configurarEventosProveedores();
@@ -19,6 +20,7 @@ function inicializarProveedores() {
 
 // ============ CARGAR PROVEEDORES ============
 async function cargarProveedores() {
+    // Actualiza la lista local con los registros que entrega el backend.
     console.log('✅ cargarProveedores ejecutado');
     try {
         proveedoresData = await getData('/proveedores');
@@ -33,6 +35,7 @@ async function cargarProveedores() {
 
 // ============ RENDERIZAR TABLA ============
 function renderizarTabla(data) {
+    // Dibuja cada proveedor como una fila que después puede seleccionarse.
     const tbody = document.getElementById('tbodyProveedores');
     if (!tbody) {
         console.error('❌ No se encontró el elemento tbodyProveedores');
@@ -56,6 +59,7 @@ function renderizarTabla(data) {
 
 // ============ BÚSQUEDA ============
 function buscarProveedores() {
+    // Busca por identificador, empresa o persona de contacto sobre la lista local.
     const termino = document.getElementById('txtBuscarProveedor').value.trim().toLowerCase();
     if (!termino) {
         renderizarTabla(proveedoresData);
@@ -81,6 +85,7 @@ function cerrarModalAgregar() {
 }
 
 function abrirModalEditar() {
+    // Toma la fila seleccionada y coloca sus datos en el formulario de edición.
     const selectedRow = document.querySelector('#tablaProveedores tbody tr.selected');
     if (!selectedRow) {
         alert('Selecciona un proveedor de la tabla');
@@ -109,6 +114,7 @@ function cerrarModalEditar() {
 
 // ============ CRUD ============
 async function guardarProveedor() {
+    // Valida los datos básicos y solicita la creación de un nuevo proveedor.
     const id = parseInt(document.getElementById('txtIdProveedor').value.trim());
     const empresa = document.getElementById('txtNombreEmpresa').value.trim();
     const contacto = document.getElementById('txtContactoProveedor').value.trim();
@@ -142,6 +148,7 @@ async function guardarProveedor() {
 }
 
 async function guardarProveedorEdit() {
+    // Envía los datos editados y refleja el cambio en la tabla local.
     const id = parseInt(document.getElementById('txtIdProveedorEdit').value);
     const empresa = document.getElementById('txtNombreEmpresaEdit').value.trim();
     const contacto = document.getElementById('txtContactoProveedorEdit').value.trim();
@@ -178,6 +185,7 @@ async function guardarProveedorEdit() {
 }
 
 async function eliminarProveedor() {
+    // Pide confirmación antes de borrar el proveedor elegido.
     const selectedRow = document.querySelector('#tablaProveedores tbody tr.selected');
     if (!selectedRow) {
         alert('Selecciona un proveedor para eliminar');
@@ -217,6 +225,7 @@ function limpiarFormularioEditar() {
 
 // ============ CONFIGURAR EVENTOS ============
 function configurarEventosProveedores() {
+    // Conecta botones, búsquedas y selección de filas con las funciones del módulo.
     console.log('✅ configurarEventosProveedores ejecutado');
     const btnBuscar = document.getElementById('btnBuscarProveedor');
     if (btnBuscar) {

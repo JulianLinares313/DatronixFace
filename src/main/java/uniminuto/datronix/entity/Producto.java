@@ -2,6 +2,7 @@ package uniminuto.datronix.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,8 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+// Representa un artículo del inventario y conserva la referencia a su proveedor.
 public class Producto {
 
     @Id
@@ -55,6 +58,4 @@ public class Producto {
 
     @Column(name = "sku_producto", length = 50, unique = true)
     private String skuProducto;
-
-  
 }

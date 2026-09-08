@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// Describe la cantidad y el valor de un producto incluido en una venta.
 public class DetalleVenta {
 
     @Id

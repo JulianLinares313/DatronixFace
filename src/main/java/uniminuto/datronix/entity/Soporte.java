@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// Registra una solicitud o caso de soporte dentro del sistema.
 public class Soporte {
 
     @Id

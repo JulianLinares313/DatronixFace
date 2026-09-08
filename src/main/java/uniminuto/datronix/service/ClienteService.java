@@ -1,87 +1,73 @@
 package uniminuto.datronix.service;
 
-import java.util.List;
-
+import uniminuto.datronix.dto.ClienteDTO;
+import uniminuto.datronix.entity.Cliente;
+import uniminuto.datronix.exception.ClienteNotFoundException;
+import uniminuto.datronix.mapper.ClienteMapper;
+import uniminuto.datronix.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
 
-import uniminuto.datronix.entity.Cliente;
-import uniminuto.datronix.repository.ClienteRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+// Coordina las reglas de clientes y conecta los DTO del API con la base de datos.
 public class ClienteService {
 
-    // Creamos una variable fija la cual sera como intermediaio para recibir los
-    // datos del Jpa creado en ClienteRepository
-    // y usar sus herramienta no de forma directa si no mediante esta variable
     private final ClienteRepository clienteRepository;
 
-    // Creamos un constructo el cual recibira los datos de la clase
-    // ClienteRepositoty el cual es el Jpa con el crup ya generado,
-    // almacenamos estos datos en la variable craeda en este clase para utilizarlos
-    // sin afectar los datos
     public ClienteService(ClienteRepository clienteRepository) {
-
         this.clienteRepository = clienteRepository;
-
     }
 
-    // creamos un metodo el cual va retornar todos los datos que esten alamcenado en
-    // nuestra base de datos
-    // y lo recibiremos como una lista mediante el metodo findAll del Jpa
-    public List<Cliente> listarClientes() {
-
-        return clienteRepository.findAll();
-
+    // LISTAR → devuelve List<ClienteDTO>
+    public List<ClienteDTO> listarClientes() {
+        // La entidad vive en la base de datos, pero hacia afuera se entrega un DTO.
+        return clienteRepository.findAll()
+                .stream()
+                .map(ClienteMapper::toDto)
+                .collect(Collectors.toList());
     }
 
-    // enviamos la variable reciba id para genarar una consulta a la base de datos
-    // y si ese id existe la base de datos nos dara los datos que tiene ese cliente
-    // buscado por su id mediante la herramienta findById y los retornamos
-    public Cliente buscarClientePorId(String id) {
-
-        return clienteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
-
+    // BUSCAR POR ID → devuelve ClienteDTO
+    public ClienteDTO buscarClientePorId(String id) {
+        // Un ID inexistente se transforma en una excepción que luego maneja la aplicación.
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNotFoundException(id));
+        return ClienteMapper.toDto(cliente);
     }
 
-    public Cliente guardarCliente(Cliente cliente) {
-
-        return clienteRepository.save(cliente);
-
+    // GUARDAR → recibe DTO, devuelve DTO
+    public ClienteDTO guardarCliente(ClienteDTO dto) {
+        // Primero se convierte lo recibido, después se guarda y finalmente se devuelve el resultado.
+        Cliente cliente = ClienteMapper.toEntity(dto);
+        Cliente guardado = clienteRepository.save(cliente);
+        return ClienteMapper.toDto(guardado);
     }
 
-    // en este metodo verificamos que el dia del cliente sea existente y es true
-    // aplicamos directamente la consulta para eliminarlo mediante el metodo del Jpa
-    // deleteById
-    // en el caso de que sea false el cual nos hace entender que no existe un
-    // cliente registrado con ese id, cancelamos la operacion con un throw new
-    // RuntimeException
+    // ACTUALIZAR → recibe DTO, devuelve DTO
+    public ClienteDTO actualizarCliente(String id, ClienteDTO dto) {
+        // Se recupera el cliente original para conservar su registro y actualizar sus datos.
+        Cliente clienteExistente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNotFoundException(id));
+
+        // Actualizar campos (solo los que vienen en el DTO)
+        clienteExistente.setNombreCliente(dto.getNombreCliente());
+        clienteExistente.setTelefonoCliente(dto.getTelefonoCliente());
+        clienteExistente.setEmailCliente(dto.getEmailCliente());
+        clienteExistente.setDireccionCliente(dto.getDireccionCliente());
+        clienteExistente.setTipoCliente(dto.getTipoCliente());
+
+        Cliente actualizado = clienteRepository.save(clienteExistente);
+        return ClienteMapper.toDto(actualizado);
+    }
+
+    // ELIMINAR → lanza excepción si no existe
     public void eliminarCliente(String id) {
-
+        // La comprobación evita intentar borrar silenciosamente un cliente que no está registrado.
         if (!clienteRepository.existsById(id)) {
-            throw new RuntimeException("Cliente no encontrado");
-        } else {
-
-            clienteRepository.deleteById(id);
-
+            throw new ClienteNotFoundException(id);
         }
-
+        clienteRepository.deleteById(id);
     }
-
-    public Cliente actualizarCliente(String id, Cliente clienteActualizado) {
-
-        return clienteRepository.findById(id)
-                .map(cliente -> {
-                    cliente.setNombreCliente(clienteActualizado.getNombreCliente());
-                    cliente.setEmailCliente(clienteActualizado.getEmailCliente());
-                    cliente.setDireccionCliente(clienteActualizado.getDireccionCliente());
-                    cliente.setTelefonoCliente(clienteActualizado.getTelefonoCliente());
-                    return clienteRepository.save(cliente);
-
-                }
-
-                )
-                .orElseThrow(() -> new RuntimeException("cliente no encontrado"));
-    }
-
 }

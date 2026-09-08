@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// Contiene la información de las personas que trabajan en la empresa.
 public class Empleado {
 
     @Id

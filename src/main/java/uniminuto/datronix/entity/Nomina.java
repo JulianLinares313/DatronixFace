@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// Guarda los datos de pago o nómina relacionados con un empleado.
 public class Nomina {
 
     @Id

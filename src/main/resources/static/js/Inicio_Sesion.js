@@ -1,4 +1,5 @@
 function validarUsuario() {
+    // Este es el recorrido completo del formulario: validar, consultar el servidor y entrar al panel.
     // Obtener valores del formulario
     const correoUsuario = document.getElementById('correoUsuario').value.trim();
     const contrasenaUsuario = document.getElementById('contrasenaUsuario').value.trim();
@@ -25,6 +26,7 @@ function validarUsuario() {
     })
     .then(response => {
         if (response.ok) {
+            // Las credenciales fueron aceptadas y el servidor devuelve los datos del usuario.
             return response.json(); // ✅ CORREGIDO: agregar paréntesis
         } else {
             // Si el login falla, leer el mensaje de error del backend
@@ -34,6 +36,7 @@ function validarUsuario() {
         }
     })
     .then(data => {
+        // El saludo confirma visualmente el acceso antes de cambiar de pantalla.
         // Login exitoso: mostrar mensaje con el nombre del usuario (si existe)
         const nombreUsuario = data.nombreUsuario || data.correoUsuario || 'Usuario';
         alert('¡Bienvenido, ' + nombreUsuario + '!');

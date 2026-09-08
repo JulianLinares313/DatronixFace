@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// Registra la devolución de productos asociada a una operación comercial.
 public class Devolucion {
 
     @Id

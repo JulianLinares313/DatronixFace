@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+// Representa la cuenta que puede identificarse y entrar al sistema.
 public class Usuario {
 
     @Id

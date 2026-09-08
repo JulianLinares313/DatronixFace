@@ -5,6 +5,8 @@ const btnSalir = document.getElementById('btnSalir');
 const fechaSpan = document.getElementById('fechaActual');
 const vistaContainer = document.getElementById('vistaContainer');
 
+// Este archivo coordina el menú: carga primero el HTML de cada módulo y después su JavaScript.
+
 // ============ RUTAS DE MÓDULOS (ABSOLUTAS) ============
 const modulos = {
     principal: { titulo: '📊 Panel de Control', archivo: '/modulos/principal.html' },
@@ -24,12 +26,14 @@ const modulos = {
 let timeoutId = null;
 
 function actualizarFecha() {
+    // Muestra en el encabezado la fecha actual usando el idioma del usuario.
     const ahora = new Date();
     const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     fechaSpan.textContent = 'Hoy es ' + ahora.toLocaleDateString('es-ES', opciones);
 }
 
 async function cargarVista(vistaId) {
+    // Cada cambio de menú reemplaza la vista y prepara el módulo elegido.
     const modulo = modulos[vistaId];
     if (!modulo) {
         vistaContainer.innerHTML = `<div class="placeholder"><p>Módulo no encontrado</p></div>`;
@@ -48,6 +52,8 @@ async function cargarVista(vistaId) {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const html = await response.text();
         vistaContainer.innerHTML = html;
+
+        // El HTML se inserta antes de importar el script para que sus elementos ya existan.
 
         // 2. Actualizar clase activa en el menú
         document.querySelectorAll('.menu-item').forEach(btn => btn.classList.remove('active'));
@@ -92,6 +98,7 @@ document.querySelector('.btn-ia')?.addEventListener('click', function () {
 });
 
 btnSalir.addEventListener('click', function () {
+    // Solo se abandona la pantalla principal después de pedir confirmación.
     if (confirm('¿Estás seguro de que quieres salir de Datronix?')) {
         window.location.href = '/index.html';
     }
@@ -99,6 +106,7 @@ btnSalir.addEventListener('click', function () {
 
 // Inicialización
 document.addEventListener('DOMContentLoaded', function () {
+    // Al abrir el panel se muestra la fecha y se carga la vista principal.
     actualizarFecha();
     cargarVista('principal');
 });

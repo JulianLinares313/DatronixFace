@@ -9,6 +9,7 @@ console.log('✅ clientes.js cargado');
 
 // ============ INICIALIZACIÓN ============
 function inicializarClientes() {
+    // Prepara la pantalla: carga registros, conecta botones y muestra el usuario actual.
     console.log('✅ inicializarClientes ejecutado');
     cargarClientes();
     configurarEventosClientes();
@@ -19,6 +20,7 @@ function inicializarClientes() {
 
 // ============ CARGAR CLIENTES ============
 async function cargarClientes() {
+    // La lista local se reemplaza con la información más reciente del backend.
     console.log('✅ cargarClientes ejecutado');
     try {
         clientesData = await getData('/clientes');
@@ -33,6 +35,7 @@ async function cargarClientes() {
 
 // ============ RENDERIZAR TABLA ============
 function renderizarTabla(data) {
+    // Convierte los datos recibidos en filas visibles dentro de la tabla.
     const tbody = document.getElementById('tbodyClientes');
     if (!tbody) {
         console.error('❌ No se encontró el elemento tbodyClientes');
@@ -55,6 +58,7 @@ function renderizarTabla(data) {
 
 // ============ BÚSQUEDA ============
 function buscarClientes() {
+    // La búsqueda se hace sobre los datos ya cargados para responder sin otra petición.
     const termino = document.getElementById('txtBuscarCliente').value.trim().toLowerCase();
     if (!termino) {
         renderizarTabla(clientesData);
@@ -79,6 +83,7 @@ function cerrarModalAgregar() {
 }
 
 function abrirModalEditar() {
+    // La fila seleccionada decide qué cliente se copia al formulario de edición.
     const selectedRow = document.querySelector('#tablaClientes tbody tr.selected');
     if (!selectedRow) {
         alert('Selecciona un cliente de la tabla');
@@ -106,6 +111,7 @@ function cerrarModalEditar() {
 
 // ============ CRUD ============
 async function guardarCliente() {
+    // Lee el formulario, valida lo indispensable y solicita crear el cliente.
     const id = document.getElementById('txtIdCliente').value.trim();
     const nombre = document.getElementById('txtNombreCliente').value.trim();
     const telefono = parseInt(document.getElementById('txtTelefonoCliente').value);
@@ -137,6 +143,7 @@ async function guardarCliente() {
 }
 
 async function guardarClienteEdit() {
+    // Envía los valores editados y actualiza la copia local cuando el servidor responde.
     const id = document.getElementById('txtIdClienteEdit').value.trim();
     const nombre = document.getElementById('txtNombreClienteEdit').value.trim();
     const telefono = parseInt(document.getElementById('txtTelefonoClienteEdit').value);
@@ -171,6 +178,7 @@ async function guardarClienteEdit() {
 }
 
 async function eliminarCliente() {
+    // Solo elimina la fila elegida después de pedir confirmación a la persona usuaria.
     const selectedRow = document.querySelector('#tablaClientes tbody tr.selected');
     if (!selectedRow) {
         alert('Selecciona un cliente para eliminar');
@@ -208,6 +216,7 @@ function limpiarFormularioEditar() {
 
 // ============ CONFIGURAR EVENTOS ============
 function configurarEventosClientes() {
+    // Conecta cada botón y cada interacción de la tabla con su acción correspondiente.
     console.log('✅ configurarEventosClientes ejecutado');
     // Buscar
     const btnBuscar = document.getElementById('btnBuscarCliente');
