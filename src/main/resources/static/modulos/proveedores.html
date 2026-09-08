@@ -1,0 +1,131 @@
+<!-- modulos/proveedores.html -->
+<div class="modulo-clientes">
+    <div class="top-bar-modulo">
+        <span class="titulo-modulo">🏢 Proveedores</span>
+        <div class="user-info-modulo">
+            <span>Usuario: <strong id="nombreUsuarioModulo">Cargando...</strong></span>
+        </div>
+    </div>
+
+    <!-- Barra de herramientas -->
+    <div class="toolbar-clientes">
+        <div class="busqueda">
+            <input type="text" id="txtBuscarProveedor" placeholder="Buscar por ID, empresa o contacto...">
+            <button class="btn btn-primary" id="btnBuscarProveedor">Buscar</button>
+            <button class="btn btn-outline" id="btnActualizarProveedor">↻ Actualizar</button>
+        </div>
+        <div class="acciones">
+            <button class="btn btn-primary" id="btnAgregarProveedor">+ Agregar</button>
+            <button class="btn btn-primary" id="btnModificarProveedor">✎ Modificar</button>
+            <button class="btn btn-danger" id="btnEliminarProveedor">🗑 Eliminar</button>
+        </div>
+    </div>
+
+    <!-- Tabla de proveedores -->
+    <div class="table-container">
+        <table class="table-datronix" id="tablaProveedores">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Empresa</th>
+                    <th>Contacto</th>
+                    <th>Teléfono</th>
+                    <th>Email</th>
+                    <th>Dirección</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyProveedores">
+                <tr><td colspan="6" class="text-center">Cargando proveedores...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Agregar Proveedor -->
+<div class="modal-overlay" id="modalAgregarProveedor">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Nuevo Proveedor Datronix</h2>
+            <span class="modal-close" id="closeAgregarProveedor">&times;</span>
+        </div>
+        <form id="formAgregarProveedor">
+            <div class="form-group">
+                <label>ID PROVEEDOR</label>
+                <input type="number" id="txtIdProveedor" placeholder="ID del proveedor" required>
+            </div>
+            <div class="form-group">
+                <label>EMPRESA</label>
+                <input type="text" id="txtNombreEmpresa" placeholder="Nombre de la empresa" required>
+            </div>
+            <div class="form-group">
+                <label>CONTACTO</label>
+                <input type="text" id="txtContactoProveedor" placeholder="Nombre del contacto">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>TELÉFONO</label>
+                    <input type="number" id="txtTelefonoProveedor" placeholder="Teléfono" required>
+                </div>
+                <div class="form-group">
+                    <label>EMAIL</label>
+                    <input type="email" id="txtEmailProveedor" placeholder="correo@empresa.com">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>DIRECCIÓN</label>
+                <input type="text" id="txtDireccionProveedor" placeholder="Dirección completa">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-success" id="btnGuardarProveedor">💾 Guardar</button>
+                <button type="button" class="btn btn-outline" id="btnLimpiarProveedor">🧹 Limpiar</button>
+                <button type="button" class="btn btn-danger" id="btnVolverProveedor">⬅ Volver</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Editar Proveedor -->
+<div class="modal-overlay" id="modalEditarProveedor">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Editar Proveedor Datronix</h2>
+            <span class="modal-close" id="closeEditarProveedor">&times;</span>
+        </div>
+        <form id="formEditarProveedor">
+            <div class="form-group">
+                <label>ID PROVEEDOR</label>
+                <input type="number" id="txtIdProveedorEdit" disabled>
+            </div>
+            <div class="form-group">
+                <label>EMPRESA</label>
+                <input type="text" id="txtNombreEmpresaEdit" placeholder="Nombre de la empresa" required>
+            </div>
+            <div class="form-group">
+                <label>CONTACTO</label>
+                <input type="text" id="txtContactoProveedorEdit" placeholder="Nombre del contacto">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>TELÉFONO</label>
+                    <input type="number" id="txtTelefonoProveedorEdit" placeholder="Teléfono" required>
+                </div>
+                <div class="form-group">
+                    <label>EMAIL</label>
+                    <input type="email" id="txtEmailProveedorEdit" placeholder="correo@empresa.com">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>DIRECCIÓN</label>
+                <input type="text" id="txtDireccionProveedorEdit" placeholder="Dirección completa">
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-success" id="btnGuardarProveedorEdit">💾 Guardar</button>
+                <button type="button" class="btn btn-outline" id="btnLimpiarProveedorEdit">🧹 Limpiar</button>
+                <button type="button" class="btn btn-danger" id="btnVolverProveedorEdit">⬅ Volver</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script específico -->
+<script type="module" src="/js/proveedores.js"></script>
