@@ -1,18 +1,21 @@
 package uniminuto.datronix.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+/**
+ * Manejador global de errores.
+ * Captura todas las excepciones de los controladores y devuelve respuestas bonitas.
+ */
 @ControllerAdvice
-// Reúne los errores del backend para que todas las respuestas tengan una forma predecible.
 public class GlobalExceptionHandler {
 
-    // --- Cliente ---
+    // 1. Cliente no encontrado → 404
     @ExceptionHandler(ClienteNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleClienteNotFound(ClienteNotFoundException ex) {
-        // Un cliente inexistente se comunica como 404, no como un error inesperado del servidor.
         ErrorResponseDTO error = ErrorResponseDTO.builder()
                 .codigo("CLI-001")
                 .mensaje(ex.getMessage())
@@ -20,10 +23,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    // --- Producto ---
+    // 2. Producto no encontrado → 404
     @ExceptionHandler(ProductoNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleProductoNotFound(ProductoNotFoundException ex) {
-        // Mantiene el mismo formato de error para las búsquedas fallidas de productos.
         ErrorResponseDTO error = ErrorResponseDTO.builder()
                 .codigo("PROD-001")
                 .mensaje(ex.getMessage())
@@ -31,10 +33,9 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    // --- Proveedor ---
+    // 3. Proveedor no encontrado → 404
     @ExceptionHandler(ProveedorNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleProveedorNotFound(ProveedorNotFoundException ex) {
-        // Mantiene el mismo formato de error para los proveedores que no existen.
         ErrorResponseDTO error = ErrorResponseDTO.builder()
                 .codigo("PROV-001")
                 .mensaje(ex.getMessage())
@@ -42,13 +43,31 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    // --- Genérico ---
+    // 4. No se puede eliminar porque tiene dependencias (ej. proveedor con compras) → 409
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        String mensaje = "No se puede eliminar el registro porque tiene dependencias asociadas.";
+
+        // Personalizar mensaje según la tabla afectada
+        if (ex.getMessage() != null && ex.getMessage().contains("compra")) {
+            mensaje = "No se puede eliminar el proveedor porque tiene compras asociadas. Elimina primero las compras o desactiva el proveedor.";
+        } else if (ex.getMessage() != null && ex.getMessage().contains("producto")) {
+            mensaje = "No se puede eliminar el proveedor porque tiene productos asociados. Reasigna los productos a otro proveedor o desactívalo.";
+        }
+
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .codigo("INTEG-001")
+                .mensaje(mensaje)
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error); // 409 Conflict
+    }
+
+    // 5. Cualquier otro error no controlado → 500
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseDTO> handleGenericException(Exception ex) {
-        // Los errores no previstos se ocultan al cliente y se responden como fallo interno.
         ErrorResponseDTO error = ErrorResponseDTO.builder()
                 .codigo("GEN-500")
-                .mensaje("Ocurrió un error interno en el servidor")
+                .mensaje("Ocurrió un error interno en el servidor. Contacta al administrador.")
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
