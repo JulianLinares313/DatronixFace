@@ -23,6 +23,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    // Si el cliente existe al momento de craerlo -> 409
+
+    @ExceptionHandler(ClienteDuplicadoException.class)
+    public ResponseEntity<ErrorResponseDTO> handleClienteDuplicado(ClienteDuplicadoException ex){
+
+
+        ErrorResponseDTO error=ErrorResponseDTO.builder()
+                    .codigo("CLI-002")
+                    .mensaje(ex.getMessage())
+                    .build();
+                    return  ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+
+    }
+       
     // 2. Producto no encontrado → 404
     @ExceptionHandler(ProductoNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleProductoNotFound(ProductoNotFoundException ex) {
@@ -32,6 +46,20 @@ public class GlobalExceptionHandler {
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+
+         // Si la empresa existe al momento de craerlo -> 409
+        @ExceptionHandler(ProveedorDuplicadoException.class)
+        public ResponseEntity<ErrorResponseDTO> handdleProveedorDuplicado(ProveedorDuplicadoException ex){
+
+            ErrorResponseDTO error=ErrorResponseDTO.builder()
+            .codigo("PROD-002")
+            .mensaje(ex.getMessage())
+            .build();
+            return  ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+
+
+
+        }
 
     // 3. Proveedor no encontrado → 404
     @ExceptionHandler(ProveedorNotFoundException.class)

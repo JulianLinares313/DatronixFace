@@ -36,7 +36,6 @@ public class Devolucion {
     @Column(name = "fecha_devolucion", nullable = false)
     private LocalDateTime fechaDevolucion;  // Fecha y hora de la devolución
 
-    // Opcional: usuario que registró la devolución
     // @Column(name = "usuario_registro", length = 100)
     // private String usuarioRegistro;
 }

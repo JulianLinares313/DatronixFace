@@ -2,6 +2,7 @@ package uniminuto.datronix.service;
 
 import uniminuto.datronix.dto.ProveedorDTO;
 import uniminuto.datronix.entity.Proveedor;
+import uniminuto.datronix.exception.ProveedorDuplicadoException;
 import uniminuto.datronix.exception.ProveedorNotFoundException;
 import uniminuto.datronix.mapper.ProveedorMapper;
 import uniminuto.datronix.repository.ProveedorRepository;
@@ -36,6 +37,22 @@ public class ProveedorService {
     }
 
     public ProveedorDTO guardarProveedor(ProveedorDTO dto) {
+
+        if(proveedorRepository.existsByNombreEmpresa(dto.getNombreEmpresa())){
+            throw new ProveedorDuplicadoException(dto.getNombreEmpresa());
+
+
+        }
+
+        if(proveedorRepository.existsByTelefonoProveedor(dto.getTelefonoProveedor())){
+            throw new RuntimeException("Ya existe una empresa con el nombre "+dto.getTelefonoProveedor());
+        }
+
+            if(proveedorRepository.existsByEmailProveedor(dto.getEmailProveedor())){
+
+                throw new RuntimeException("Ya existe un Email registrado a un proveedor "+dto.getEmailProveedor());
+
+            }
         // El DTO se transforma en entidad, se guarda y se vuelve a convertir para la respuesta.
         Proveedor proveedor = ProveedorMapper.toEntity(dto);
         Proveedor guardado = proveedorRepository.save(proveedor);

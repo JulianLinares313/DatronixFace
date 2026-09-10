@@ -2,6 +2,7 @@ package uniminuto.datronix.service;
 
 import uniminuto.datronix.dto.ClienteDTO;
 import uniminuto.datronix.entity.Cliente;
+import uniminuto.datronix.exception.ClienteDuplicadoException;
 import uniminuto.datronix.exception.ClienteNotFoundException;
 import uniminuto.datronix.mapper.ClienteMapper;
 import uniminuto.datronix.repository.ClienteRepository;
@@ -11,7 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-// Coordina las reglas de clientes y conecta los DTO del API con la base de datos.
+// Coordina las reglas de clientes y conecta los DTO del API con la base de
+// datos.
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
@@ -31,7 +33,8 @@ public class ClienteService {
 
     // BUSCAR POR ID → devuelve ClienteDTO
     public ClienteDTO buscarClientePorId(String id) {
-        // Un ID inexistente se transforma en una excepción que luego maneja la aplicación.
+        // Un ID inexistente se transforma en una excepción que luego maneja la
+        // aplicación.
         Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new ClienteNotFoundException(id));
         return ClienteMapper.toDto(cliente);
@@ -39,7 +42,15 @@ public class ClienteService {
 
     // GUARDAR → recibe DTO, devuelve DTO
     public ClienteDTO guardarCliente(ClienteDTO dto) {
-        // Primero se convierte lo recibido, después se guarda y finalmente se devuelve el resultado.
+
+        if (clienteRepository.existsById(dto.getIdCliente())) {
+
+            throw new  ClienteDuplicadoException(dto.getIdCliente());
+
+        }
+
+        // Primero se convierte lo recibido, después se guarda y finalmente se devuelve
+        // el resultado.
         Cliente cliente = ClienteMapper.toEntity(dto);
         Cliente guardado = clienteRepository.save(cliente);
         return ClienteMapper.toDto(guardado);
@@ -47,7 +58,8 @@ public class ClienteService {
 
     // ACTUALIZAR → recibe DTO, devuelve DTO
     public ClienteDTO actualizarCliente(String id, ClienteDTO dto) {
-        // Se recupera el cliente original para conservar su registro y actualizar sus datos.
+        // Se recupera el cliente original para conservar su registro y actualizar sus
+        // datos.
         Cliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new ClienteNotFoundException(id));
 
@@ -64,7 +76,8 @@ public class ClienteService {
 
     // ELIMINAR → lanza excepción si no existe
     public void eliminarCliente(String id) {
-        // La comprobación evita intentar borrar silenciosamente un cliente que no está registrado.
+        // La comprobación evita intentar borrar silenciosamente un cliente que no está
+        // registrado.
         if (!clienteRepository.existsById(id)) {
             throw new ClienteNotFoundException(id);
         }
