@@ -16,9 +16,8 @@ import lombok.NoArgsConstructor;
 public class Proveedor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_proveedor", nullable = false)
-    private Long idProveedor;
+    private String idProveedor;
 
     @Column(name = "nombre_empresa", length = 100, nullable = false)
     private String nombreEmpresa;

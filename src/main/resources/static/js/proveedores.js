@@ -91,8 +91,8 @@ function abrirModalEditar() {
         alert('Selecciona un proveedor de la tabla');
         return;
     }
-    const id = parseInt(selectedRow.dataset.id);
-    const proveedor = proveedoresData.find(p => p.idProveedor === id);
+    const id = selectedRow.dataset.id
+    const proveedor = proveedoresData.find(p => String(p.idProveedor) === String(id));
     if (!proveedor) {
         alert('Proveedor no encontrado');
         return;
@@ -115,7 +115,7 @@ function cerrarModalEditar() {
 // ============ CRUD ============
 async function guardarProveedor() {
     // Valida los datos básicos y solicita la creación de un nuevo proveedor.
-    const id = parseInt(document.getElementById('txtIdProveedor').value.trim());
+    const id = document.getElementById('txtIdProveedor').value.trim();
     const empresa = document.getElementById('txtNombreEmpresa').value.trim();
     const contacto = document.getElementById('txtContactoProveedor').value.trim();
     const telefono = parseInt(document.getElementById('txtTelefonoProveedor').value);
@@ -149,7 +149,7 @@ async function guardarProveedor() {
 
 async function guardarProveedorEdit() {
     // Envía los datos editados y refleja el cambio en la tabla local.
-    const id = parseInt(document.getElementById('txtIdProveedorEdit').value);
+    const id = document.getElementById('txtIdProveedorEdit').value;  // String    
     const empresa = document.getElementById('txtNombreEmpresaEdit').value.trim();
     const contacto = document.getElementById('txtContactoProveedorEdit').value.trim();
     const telefono = parseInt(document.getElementById('txtTelefonoProveedorEdit').value);
@@ -172,7 +172,8 @@ async function guardarProveedorEdit() {
 
     try {
         await putData(`/proveedores/${id}`, proveedorActualizado);
-        const index = proveedoresData.findIndex(p => p.idProveedor === id);
+        const index = proveedoresData.findIndex(p => String(p.idProveedor) === String(id));
+
         if (index !== -1) {
             proveedoresData[index] = proveedorActualizado;
         }
@@ -191,12 +192,12 @@ async function eliminarProveedor() {
         alert('Selecciona un proveedor para eliminar');
         return;
     }
-    const id = parseInt(selectedRow.dataset.id);
+    const id = selectedRow.dataset.id;
     if (!confirm(`¿Eliminar el proveedor con ID ${id}?`)) return;
 
     try {
         await deleteData(`/proveedores/${id}`);
-        proveedoresData = proveedoresData.filter(p => p.idProveedor !== id);
+        proveedoresData = proveedoresData.filter(p => String(p.idProveedor) !== String(id));
         renderizarTabla(proveedoresData);
         alert('🗑 Proveedor eliminado');
     } catch (error) {

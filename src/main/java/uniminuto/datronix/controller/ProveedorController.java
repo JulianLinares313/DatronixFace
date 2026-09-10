@@ -27,7 +27,7 @@ public class ProveedorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProveedorDTO> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<ProveedorDTO> buscarPorId(@PathVariable String id) {
         // Consulta un proveedor concreto usando el ID que llega en la dirección web.
         return ResponseEntity.ok(proveedorService.buscarProveedorPorId(id));
     }
@@ -40,14 +40,14 @@ public class ProveedorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProveedorDTO> actualizarProveedor(@PathVariable Long id, @RequestBody ProveedorDTO dto) {
+    public ResponseEntity<ProveedorDTO> actualizarProveedor(@PathVariable String id, @RequestBody ProveedorDTO dto) {
         // Busca por ID y reemplaza la información editable del proveedor.
         ProveedorDTO actualizado = proveedorService.actualizarProveedor(id, dto);
         return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarProveedor(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarProveedor(@PathVariable String id) {
         // Elimina el registro solo después de que el servicio confirme que existe.
         proveedorService.eliminarProveedor(id);
         return ResponseEntity.noContent().build();

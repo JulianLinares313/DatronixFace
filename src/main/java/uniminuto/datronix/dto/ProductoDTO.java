@@ -24,6 +24,6 @@ public class ProductoDTO {
     private BigDecimal precioVentaProducto;
     private Long stockProducto;
     private Long stockMinimoProducto;
-    private Long idProveedor;          // Solo el ID del proveedor
+    private String idProveedor;          // Solo el ID del proveedor
     private String skuProducto;
 }

@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
  * Manejador global de errores.
- * Captura todas las excepciones de los controladores y devuelve respuestas bonitas.
+ * Captura todas las excepciones de los controladores y devuelve respuestas
+ * bonitas.
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -26,17 +27,16 @@ public class GlobalExceptionHandler {
     // Si el cliente existe al momento de craerlo -> 409
 
     @ExceptionHandler(ClienteDuplicadoException.class)
-    public ResponseEntity<ErrorResponseDTO> handleClienteDuplicado(ClienteDuplicadoException ex){
+    public ResponseEntity<ErrorResponseDTO> handleClienteDuplicado(ClienteDuplicadoException ex) {
 
-
-        ErrorResponseDTO error=ErrorResponseDTO.builder()
-                    .codigo("CLI-002")
-                    .mensaje(ex.getMessage())
-                    .build();
-                    return  ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .codigo("CLI-002")
+                .mensaje(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
 
     }
-       
+
     // 2. Producto no encontrado → 404
     @ExceptionHandler(ProductoNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleProductoNotFound(ProductoNotFoundException ex) {
@@ -47,19 +47,49 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-         // Si la empresa existe al momento de craerlo -> 409
-        @ExceptionHandler(ProveedorDuplicadoException.class)
-        public ResponseEntity<ErrorResponseDTO> handdleProveedorDuplicado(ProveedorDuplicadoException ex){
+    // Si el Id proveedor existe antes de crearlo -> 409
 
-            ErrorResponseDTO error=ErrorResponseDTO.builder()
-            .codigo("PROD-002")
-            .mensaje(ex.getMessage())
-            .build();
-            return  ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    @ExceptionHandler(ProveedorIdDuplicadoException.class)
+    public ResponseEntity<ErrorResponseDTO> handdleProveedorIdDuplicado(ProveedorIdDuplicadoException ex) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .codigo("PROD-002")
+                .mensaje(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
 
+    }
 
+    // Si la empresa existe al momento de craerlo -> 409
+    @ExceptionHandler(ProveedorDuplicadoException.class)
+    public ResponseEntity<ErrorResponseDTO> handdleProveedorDuplicado(ProveedorDuplicadoException ex) {
 
-        }
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .codigo("PROD-003")
+                .mensaje(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+
+    }
+
+    @ExceptionHandler(ProveedorTelefonoDuplicadoException.class)
+    public ResponseEntity<ErrorResponseDTO> handdleProveedorTelefonoDuplicado(ProveedorTelefonoDuplicadoException ex) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .codigo("PROD-004")
+                .mensaje(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+
+    }
+
+    @ExceptionHandler(ProveedorEmailDuplicadoException.class)
+    public ResponseEntity<ErrorResponseDTO> handdleProveedorEmailDuplicado(ProveedorEmailDuplicadoException ex) {
+        ErrorResponseDTO error = ErrorResponseDTO.builder()
+                .codigo("PROD-005")
+                .mensaje(ex.getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+
+    }
 
     // 3. Proveedor no encontrado → 404
     @ExceptionHandler(ProveedorNotFoundException.class)
@@ -71,7 +101,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    // 4. No se puede eliminar porque tiene dependencias (ej. proveedor con compras) → 409
+    // 4. No se puede eliminar porque tiene dependencias (ej. proveedor con compras)
+    // → 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponseDTO> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         String mensaje = "No se puede eliminar el registro porque tiene dependencias asociadas.";

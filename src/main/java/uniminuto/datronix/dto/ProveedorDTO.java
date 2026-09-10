@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 // Define los datos de proveedor que necesita el formulario y la API.
 public class ProveedorDTO {
-    private Long idProveedor;
+    private String idProveedor;
     private String nombreEmpresa;
     private String contactoProveedor;
     private Long telefonoProveedor;
