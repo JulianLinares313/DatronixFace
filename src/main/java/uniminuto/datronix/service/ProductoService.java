@@ -10,6 +10,8 @@ import uniminuto.datronix.repository.ProductoRepository;
 import uniminuto.datronix.repository.ProveedorRepository;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,7 @@ public class ProductoService {
         this.proveedorRepository = proveedorRepository;
     }
 
+    @Transactional(readOnly = true)
     public List<ProductoDTO> listarProductos() {
         // Lee los productos y convierte cada entidad al formato que consume el frontend.
         return productoRepository.findAll()

@@ -14,7 +14,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-// Representa un artículo del inventario y conserva la referencia a su proveedor.
+// Representa un artículo del inventario y conserva la referencia a su
+// proveedor.
 public class Producto {
 
     @Id
@@ -52,7 +53,7 @@ public class Producto {
     @Column(name = "stock_minimo_producto", nullable = false)
     private Long stockMinimoProducto;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_proveedor", referencedColumnName = "id_proveedor")
     private Proveedor proveedor;
 
