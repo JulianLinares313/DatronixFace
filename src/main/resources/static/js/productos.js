@@ -40,7 +40,7 @@ function llenarSelectProveedores(idSelect) {
     select.innerHTML = '<option value="">Seleccionar proveedor...</option>';
     proveedoresData.forEach(p => {
         const option = document.createElement('option');
-        option.value = p.idProveedor;
+        option.value = p.idProveedor; // NIT como String
         option.textContent = p.nombreEmpresa || p.contactoProveedor || p.idProveedor;
         select.appendChild(option);
     });
@@ -85,7 +85,7 @@ function renderizarTabla(data) {
             <td>${p.precioVentaProducto}</td>
             <td>${p.stockProducto}</td>
             <td>${p.stockMinimoProducto}</td>
-            <td>${p.proveedor?.nombreEmpresa || p.proveedor?.contactoProveedor || p.proveedor?.idProveedor || '-'}</td>
+            <td>${p.idProveedor || '-'}</td> <!-- Mostramos el ID del proveedor -->
         </tr>
     `).join('');
 }
@@ -110,7 +110,7 @@ function abrirModalAgregar() {
     document.getElementById('modalAgregarProducto').classList.add('active');
     limpiarFormularioAgregar();
     cargarProveedores();
-    document.getElementById('txtIdProducto').focus();
+    // El ID se genera automáticamente, no hay campo que enfocar.
 }
 
 function cerrarModalAgregar() {
@@ -141,8 +141,9 @@ function abrirModalEditar() {
         document.getElementById('txtPrecioVentaEdit').value = producto.precioVentaProducto;
         document.getElementById('txtStockProductoEdit').value = producto.stockProducto;
         document.getElementById('txtStockMinimoEdit').value = producto.stockMinimoProducto;
-        if (producto.proveedor) {
-            document.getElementById('selectProveedorEdit').value = producto.proveedor.idProveedor;
+        // Asignamos el proveedor usando el campo plano idProveedor del DTO
+        if (producto.idProveedor) {
+            document.getElementById('selectProveedorEdit').value = producto.idProveedor;
         }
         document.getElementById('modalEditarProducto').classList.add('active');
     });
@@ -156,7 +157,7 @@ function cerrarModalEditar() {
 // ============ CRUD ============
 async function guardarProducto() {
     // Lee y valida el formulario antes de enviar un nuevo producto al backend.
-    const id = parseInt(document.getElementById('txtIdProducto').value.trim());
+    // El ID no se lee porque lo genera la base de datos.
     const nombre = document.getElementById('txtNombreProducto').value.trim();
     const categoria = document.getElementById('txtCategoriaProducto').value.trim();
     const marca = document.getElementById('txtMarcaProducto').value.trim();
@@ -165,15 +166,16 @@ async function guardarProducto() {
     const precioVenta = parseFloat(document.getElementById('txtPrecioVenta').value);
     const stock = parseInt(document.getElementById('txtStockProducto').value);
     const stockMinimo = parseInt(document.getElementById('txtStockMinimo').value);
-    const idProveedor = parseInt(document.getElementById('selectProveedor').value);
+    // El idProveedor es un NIT String, no se parsea.
+    const idProveedor = document.getElementById('selectProveedor').value;
 
-    if (!id || !nombre || isNaN(precioCosto) || isNaN(precioVenta) || isNaN(stock) || isNaN(stockMinimo) || !idProveedor) {
-        alert('Todos los campos obligatorios deben estar llenos (ID, Nombre, Precios, Stock, Stock Mínimo y Proveedor).');
+    if (!nombre || isNaN(precioCosto) || isNaN(precioVenta) || isNaN(stock) || isNaN(stockMinimo) || !idProveedor) {
+        alert('Todos los campos obligatorios deben estar llenos (Nombre, Precios, Stock, Stock Mínimo y Proveedor).');
         return;
     }
 
     const nuevoProducto = {
-        idProducto: id,
+        // No enviamos idProducto; el backend lo genera automáticamente.
         nombreProducto: nombre,
         categoriaProducto: categoria || null,
         marcaProducto: marca || null,
@@ -182,7 +184,7 @@ async function guardarProducto() {
         precioVentaProducto: precioVenta,
         stockProducto: stock,
         stockMinimoProducto: stockMinimo,
-        proveedor: { idProveedor: idProveedor }
+        idProveedor: idProveedor   // Campo plano, como String
     };
 
     try {
@@ -207,7 +209,8 @@ async function guardarProductoEdit() {
     const precioVenta = parseFloat(document.getElementById('txtPrecioVentaEdit').value);
     const stock = parseInt(document.getElementById('txtStockProductoEdit').value);
     const stockMinimo = parseInt(document.getElementById('txtStockMinimoEdit').value);
-    const idProveedor = parseInt(document.getElementById('selectProveedorEdit').value);
+    // El idProveedor es un NIT String, no se parsea.
+    const idProveedor = document.getElementById('selectProveedorEdit').value;
 
     if (!nombre || isNaN(precioCosto) || isNaN(precioVenta) || isNaN(stock) || isNaN(stockMinimo) || !idProveedor) {
         alert('Nombre, Precios, Stock, Stock Mínimo y Proveedor son obligatorios.');
@@ -224,7 +227,7 @@ async function guardarProductoEdit() {
         precioVentaProducto: precioVenta,
         stockProducto: stock,
         stockMinimoProducto: stockMinimo,
-        proveedor: { idProveedor: idProveedor }
+        idProveedor: idProveedor   // Campo plano, como String
     };
 
     try {
@@ -263,7 +266,6 @@ async function eliminarProducto() {
 
 // ============ LIMPIAR FORMULARIOS ============
 function limpiarFormularioAgregar() {
-    document.getElementById('txtIdProducto').value = '';
     document.getElementById('txtNombreProducto').value = '';
     document.getElementById('txtCategoriaProducto').value = '';
     document.getElementById('txtMarcaProducto').value = '';

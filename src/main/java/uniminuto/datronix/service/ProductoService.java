@@ -43,14 +43,17 @@ public class ProductoService {
         return ProductoMapper.toDto(producto);
     }
 
-    public ProductoDTO guardarProducto(ProductoDTO dto) {
-        // Antes de guardar el producto se confirma que el proveedor indicado exista.
-        Proveedor proveedor = proveedorRepository.findById(dto.getIdProveedor())
-                .orElseThrow(() -> new ProveedorNotFoundException(dto.getIdProveedor()));
-        Producto producto = ProductoMapper.toEntity(dto, proveedor);
-        Producto guardado = productoRepository.save(producto);
-        return ProductoMapper.toDto(guardado);
-    }
+   public ProductoDTO guardarProducto(ProductoDTO dto) {
+    // Nos aseguramos de que la BD genere el ID, ignorando cualquier valor que venga del cliente.
+    dto.setIdProducto(null);
+
+    Proveedor proveedor = proveedorRepository.findById(dto.getIdProveedor())
+            .orElseThrow(() -> new ProveedorNotFoundException(dto.getIdProveedor()));
+
+    Producto producto = ProductoMapper.toEntity(dto, proveedor);
+    Producto guardado = productoRepository.save(producto);
+    return ProductoMapper.toDto(guardado);
+}
 
     public ProductoDTO actualizarProducto(Long id, ProductoDTO dto) {
         // Se edita el registro existente y se conserva su identidad en la base de datos.

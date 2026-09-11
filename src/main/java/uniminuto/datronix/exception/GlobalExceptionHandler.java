@@ -103,23 +103,14 @@ public class GlobalExceptionHandler {
 
     // 4. No se puede eliminar porque tiene dependencias (ej. proveedor con compras)
     // → 409
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponseDTO> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        String mensaje = "No se puede eliminar el registro porque tiene dependencias asociadas.";
-
-        // Personalizar mensaje según la tabla afectada
-        if (ex.getMessage() != null && ex.getMessage().contains("compra")) {
-            mensaje = "No se puede eliminar el proveedor porque tiene compras asociadas. Elimina primero las compras o desactiva el proveedor.";
-        } else if (ex.getMessage() != null && ex.getMessage().contains("producto")) {
-            mensaje = "No se puede eliminar el proveedor porque tiene productos asociados. Reasigna los productos a otro proveedor o desactívalo.";
-        }
-
-        ErrorResponseDTO error = ErrorResponseDTO.builder()
-                .codigo("INTEG-001")
-                .mensaje(mensaje)
-                .build();
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(error); // 409 Conflict
-    }
+   @ExceptionHandler(DataIntegrityViolationException.class)
+public ResponseEntity<ErrorResponseDTO> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+    ErrorResponseDTO error = ErrorResponseDTO.builder()
+            .codigo("INTEG-001")
+            .mensaje("Operación bloqueada por una restricción de la base de datos. Verifica que los IDs relacionados existan y que no haya duplicados.")
+            .build();
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+}
 
     // 5. Cualquier otro error no controlado → 500
     @ExceptionHandler(Exception.class)
