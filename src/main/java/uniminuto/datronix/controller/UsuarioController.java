@@ -54,7 +54,7 @@ public class UsuarioController {
 
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public void eliminarUsuario(@PathVariable String id) {
         // Solicita al servicio que elimine el usuario indicado.
         usuarioService.eliminarUsuario(id);

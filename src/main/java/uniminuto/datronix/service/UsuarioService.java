@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import uniminuto.datronix.dto.UsuarioDTO;
 import uniminuto.datronix.entity.Usuario;
-import uniminuto.datronix.exception.UsuarioNotFoundExceptio;
+import uniminuto.datronix.exception.UsuarioNotFoundException;
 import uniminuto.datronix.mapper.UsuarioMapper;
 import uniminuto.datronix.repository.UsuarioRepository;
 
@@ -35,7 +35,7 @@ public class UsuarioService {
     public UsuarioDTO buscarUsuarioPorId(String id) {
         // La búsqueda termina con un mensaje de error si el usuario no existe.
         Usuario usuario= usuarioRepository.findById(id)
-                .orElseThrow(()-> new UsuarioNotFoundExceptio(id));
+                .orElseThrow(()-> new UsuarioNotFoundException(id));
                 return UsuarioMapper.toDTO(usuario);
 
     }
@@ -52,7 +52,7 @@ public class UsuarioService {
         // Primero se comprueba que el registro exista para evitar un borrado silencioso.
         if (!usuarioRepository.existsById(id)) {
 
-            throw new RuntimeException("Usuario no encontrado");
+            throw new UsuarioNotFoundException(id);
 
         } else {
 

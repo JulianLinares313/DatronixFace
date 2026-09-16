@@ -1,15 +1,15 @@
 package uniminuto.datronix.exception;
 
-public class UsuarioNotFoundExceptio extends RuntimeException {
+public class UsuarioNotFoundException extends RuntimeException {
 
-    public UsuarioNotFoundExceptio(String id) {
+    public UsuarioNotFoundException(String id) {
 
         super("Usuario con ID " + id + " no encontrado");
 
     }
     // excepcion opcional en el caso de que existas un error en la base de datos
 
-    public UsuarioNotFoundExceptio(String mensaje, Throwable causa) {
+    public UsuarioNotFoundException(String mensaje, Throwable causa) {
 
         super(mensaje, causa);
 

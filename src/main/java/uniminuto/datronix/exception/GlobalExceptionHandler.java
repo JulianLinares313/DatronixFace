@@ -14,6 +14,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    //Usuario no encontrado 
+    @ExceptionHandler(UsuarioNotFoundException.class)
+    public  ResponseEntity<ErrorResponseDTO> handleUsuarioNotFound(UsuarioNotFoundException ex){
+        ErrorResponseDTO error=ErrorResponseDTO.builder()
+        .codigo("USU-001")
+        .mensaje(ex.getMessage())
+        .build();
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+
+
+    }
+    
+
     // 1. Cliente no encontrado → 404
     @ExceptionHandler(ClienteNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleClienteNotFound(ClienteNotFoundException ex) {
@@ -41,7 +54,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProductoNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleProductoNotFound(ProductoNotFoundException ex) {
         ErrorResponseDTO error = ErrorResponseDTO.builder()
-                .codigo("PROD-001")
+                .codigo("PROV-001")
                 .mensaje(ex.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
@@ -52,7 +65,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProveedorIdDuplicadoException.class)
     public ResponseEntity<ErrorResponseDTO> handdleProveedorIdDuplicado(ProveedorIdDuplicadoException ex) {
         ErrorResponseDTO error = ErrorResponseDTO.builder()
-                .codigo("PROD-002")
+                .codigo("PROV-002")
                 .mensaje(ex.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
@@ -64,7 +77,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handdleProveedorDuplicado(ProveedorDuplicadoException ex) {
 
         ErrorResponseDTO error = ErrorResponseDTO.builder()
-                .codigo("PROD-003")
+                .codigo("PROV-003")
                 .mensaje(ex.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
@@ -74,7 +87,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProveedorTelefonoDuplicadoException.class)
     public ResponseEntity<ErrorResponseDTO> handdleProveedorTelefonoDuplicado(ProveedorTelefonoDuplicadoException ex) {
         ErrorResponseDTO error = ErrorResponseDTO.builder()
-                .codigo("PROD-004")
+                .codigo("PROV-004")
                 .mensaje(ex.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
@@ -84,7 +97,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ProveedorEmailDuplicadoException.class)
     public ResponseEntity<ErrorResponseDTO> handdleProveedorEmailDuplicado(ProveedorEmailDuplicadoException ex) {
         ErrorResponseDTO error = ErrorResponseDTO.builder()
-                .codigo("PROD-005")
+                .codigo("PROV-005")
                 .mensaje(ex.getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
