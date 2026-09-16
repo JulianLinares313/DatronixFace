@@ -1,10 +1,14 @@
 package uniminuto.datronix.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import uniminuto.datronix.dto.UsuarioDTO;
 import uniminuto.datronix.entity.Usuario;
+import uniminuto.datronix.exception.UsuarioNotFoundExceptio;
+import uniminuto.datronix.mapper.UsuarioMapper;
 import uniminuto.datronix.repository.UsuarioRepository;
 
 @Service
@@ -19,24 +23,30 @@ public class UsuarioService {
 
     }
 
-    public List<Usuario> listarUsuarios() {
+    public List<UsuarioDTO> listarUsuarios() {
         // Devuelve todos los usuarios que conoce el repositorio.
-        return usuarioRepository.findAll();
-
+        return usuarioRepository.findAll()
+        .stream()
+        .map(UsuarioMapper::toDTO)
+        .collect(Collectors.toList());
+        
     }
 
-    public Usuario buscarUsuarioPorId(String id) {
+    public UsuarioDTO buscarUsuarioPorId(String id) {
         // La búsqueda termina con un mensaje de error si el usuario no existe.
-        return usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encotrado"));
+        Usuario usuario= usuarioRepository.findById(id)
+                .orElseThrow(()-> new UsuarioNotFoundExceptio(id));
+                return UsuarioMapper.toDTO(usuario);
 
     }
 
-    public Usuario guardarUsuario(Usuario usuario) {
+    public UsuarioDTO guardarUsuario(UsuarioDTO usuarioDTO) {
         // Persiste el usuario que llegó desde el controlador.
-        return usuarioRepository.save(usuario);
-
+        Usuario usuario=UsuarioMapper.toEntity(usuarioDTO);
+        Usuario creado =usuarioRepository.save(usuario);
+        return UsuarioMapper.toDTO(creado);
     }
+
 
     public void eliminarUsuario(String id) {
         // Primero se comprueba que el registro exista para evitar un borrado silencioso.

@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import uniminuto.datronix.dto.LoginRequest;
+import uniminuto.datronix.dto.UsuarioDTO;
 import uniminuto.datronix.entity.Usuario;
 import uniminuto.datronix.service.UsuarioService;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@CrossOrigin(origins = "*")  //  Permite peticiones desde cualquier origen
+@CrossOrigin(origins = "*") // Permite peticiones desde cualquier origen
 // Atiende el registro, las consultas y el inicio de sesión de los usuarios.
 public class UsuarioController {
 
@@ -32,23 +33,25 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> listarUsuarios() {
+    public ResponseEntity<List<UsuarioDTO>> listarUsuarios() {
         // Devuelve los usuarios que el servicio encuentra en la base de datos.
-        return usuarioService.listarUsuarios();
-
+        return ResponseEntity.ok(usuarioService.listarUsuarios());
     }
 
     @GetMapping("/{id}")
-    public Usuario buscarUsuarioPorId(@PathVariable String id) {
+    public ResponseEntity<UsuarioDTO> buscarUsuarioPorId(@PathVariable String id) {
         // Usa el documento o identificador recibido en la URL para buscar un usuario.
-        return usuarioService.buscarUsuarioPorId(id);
+        UsuarioDTO usuario = usuarioService.buscarUsuarioPorId(id);
+        return ResponseEntity.ok(usuario);
 
     }
 
     @PostMapping
-    public Usuario guardarUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<UsuarioDTO> guardarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         // Guarda directamente los datos del usuario enviados por el formulario.
-        return usuarioService.guardarUsuario(usuario);
+        UsuarioDTO usuarioCreado = usuarioService.guardarUsuario(usuarioDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCreado);
+
     }
 
     @DeleteMapping
@@ -60,7 +63,8 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        // Comprueba las credenciales y devuelve al usuario o un aviso de acceso rechazado.
+        // Comprueba las credenciales y devuelve al usuario o un aviso de acceso
+        // rechazado.
         Usuario usuario = usuarioService.autenticar(loginRequest.getCorreoUsuario(),
                 loginRequest.getContrasenaUsuario());
 
